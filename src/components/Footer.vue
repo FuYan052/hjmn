@@ -45,7 +45,6 @@ export default {
   width: 100%;
   height: 430px;
   background:rgba(38,38,45,1);
-  margin-top: 1000px;
   .booterBox{
     width: 1270px;
     height: 430px;
