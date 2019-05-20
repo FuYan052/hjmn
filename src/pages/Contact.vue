@@ -1,9 +1,26 @@
 <template>
+  <!-- 联系我们 -->
   <div class="contact">
     <banner></banner>
     <header-nav></header-nav>
-    <h1>联系我们</h1>
+    <!-- 联系我们 -->
+    <div class="contactUs"> 
+      <p>联系我们</p>
+      <p>CONTACT&nbsp;&nbsp;US</p>
+    </div>
+    <!-- 联系方式 -->
+    <div class="contactType">
+      <p>18228957188（陈先生)</p>
+      <p>崇州市观胜镇双桥村八组</p>
+    </div>
+    <div class="mapWrap">
+      <div class="leftMap">
 
+      </div>
+      <div class="rightForm">
+
+      </div>
+    </div>
     <!-- 网页底部 -->
     <Footer></Footer>
     
@@ -24,7 +41,72 @@ export default {
 }
 </script>
 
-<style >
-
+<style lang="scss" scoped>
+.contact{
+  width: 100%;
+  height: auto;
+  .contactUs{
+    width: 100%;
+    height: 167px;
+    background: #fff;
+    overflow: hidden;
+    margin-bottom: 90px;
+    p:nth-child(1){
+      font-size:36px;
+      color:rgba(48,48,48,1);
+      text-align: center;
+      line-height: 36px;
+      margin-top: 90px;
+    }
+    p:nth-child(2){
+      font-size:24px;
+      color:rgba(193,155,118,1);
+      text-align: center;
+      line-height: 26px;
+      margin-top: 15px;
+    }
+  }
+  .contactType{
+    width: 57.29%;
+    height: 42px;
+    margin: 0 auto;
+    border: 1px solid red;
+    margin-bottom: 55px;
+    p{
+      font-size:24px;
+      color:rgba(59,59,59,1);
+      line-height:42px;
+      padding-left: 60px;
+    }
+    p:nth-child(1){
+      float: left;
+      background: url("../assets/c-phone.png") no-repeat left center;
+    }
+    p:nth-child(2){
+      float: right;
+      background: url("../assets/c-address.png") no-repeat left center;
+    }
+  }
+  .mapWrap{
+    width: 63.54%;
+    height: 505px;
+    margin: 0 auto;
+    border: 1px solid red;
+    .leftMap{
+      width: 47.54%;
+      height: 433px;
+      float: left;
+      margin-top: 32px;
+      border: 1px solid blueviolet;
+    }
+    .rightForm{
+      width: 42.37%;
+      height: 100%;
+      float: right;
+      border: 1px solid blueviolet;
+    }
+  }
+}
 </style>
+
 

@@ -2,6 +2,9 @@
   <div class="home">
     <banner></banner>
     <header-nav></header-nav>
+    <div class="historyBtn">
+      品牌故事
+    </div>
     <!-- 品牌探索 -->
     <div class="brandExploratory"> 
       <p>品牌探索</p>
@@ -114,6 +117,22 @@ export default {
   width: 100%;
   height: auto;
   background: #f5f5f5;
+  .historyBtn{
+    width: 220px;
+    height: 68px;
+    background: rgba(178,133,100,1);
+    font-size:30px;
+    font-family:SourceHanSerifCN-ExtraLight;
+    color:rgba(255,255,255,1);
+    text-align: center;
+    line-height: 68px;
+    z-index: 12;
+    position: relative;
+    margin: 0 auto;
+    margin-top: -240px;
+    margin-bottom: 165px;
+    cursor: pointer;
+  }
   .brandExploratory{
     width: 100%;
     height: 555px;
