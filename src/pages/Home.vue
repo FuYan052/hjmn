@@ -39,9 +39,8 @@
       查看更多
     </div>
     <!-- 制作流程 -->
-    <div class="process">
-
-    </div>
+    <process></process>
+    <!-- 网页底部 -->
     <Footer></Footer>
   </div>
 </template>
@@ -50,12 +49,14 @@
 import Banner from '../components/Banner'
 import HeaderNav from '../components/HeaderNav'
 import Footer from '../components/Footer'
+import Process from '../components/Process'
 export default {
   name: 'Home',
   components: {
     Banner,
     HeaderNav,
-    Footer
+    Footer,
+    Process
   },
   data() {
     return{
@@ -110,6 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 .home{
+  width: 100%;
   height: auto;
   background: #f5f5f5;
   .brandExploratory{
@@ -247,11 +249,6 @@ export default {
     color:rgba(255,255,255,1);
     line-height:56px;
     cursor: pointer;
-  }
-  .process{
-    width: 100%;
-    height: 500px;
-    background: #fff;
   }
 }
 </style>
