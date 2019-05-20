@@ -15,7 +15,14 @@
     </div>
     <div class="mapWrap">
       <div class="leftMap">
-
+        <baidu-map 
+        class="bm-view" 
+        ak="uRhBKfzW36pGW8KGkyAhpwXDYwmjNcZP"
+        :center="center"
+        :zoom="zoom" 
+        @ready="handler"
+        >
+        </baidu-map>
       </div>
       <div class="rightForm">
 
@@ -31,12 +38,30 @@
 import Banner from '../components/Banner'
 import HeaderNav from '../components/HeaderNav'
 import Footer from '../components/Footer'
+// import BaiduMap from 'vue-baidu-map'
+import { BaiduMap } from 'vue-baidu-map'
+
 export default {
   name: 'Contact',
   components: {
     Banner,
     HeaderNav,
+    BaiduMap,
     Footer
+  },
+  data() {
+    return{
+      center: {lng: 0, lat: 0},
+      zoom: 3
+    }
+  },
+   methods: {
+    handler ({BMap, map}) {
+      console.log(BMap, map)
+      this.center.lng = 103.67937
+      this.center.lat = 30.767555
+      this.zoom = 15
+    }
   }
 }
 </script>
@@ -98,6 +123,11 @@ export default {
       float: left;
       margin-top: 32px;
       border: 1px solid blueviolet;
+      .bm-view {
+        width: 100%;
+        // height: 300px;
+        height: 100%;
+      }
     }
     .rightForm{
       width: 42.37%;
