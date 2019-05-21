@@ -136,26 +136,23 @@ export default {
   top: 0;
   left: 0;
 }
-.currImg .smallImgBox{
+/* .currImg .smallImgBox{
   width: 100%;
   height: 200px;
-  border: 1px solid orange;
-  position: relative;
-  z-index: 1000;
-}
+} */
 .currImg .vgs{
   z-index: 998;
   width: 100%;
-  display: block !important;
-  /* height: 550px; */
+  height: 550px;
   position: absolute;
   order: 1px solid green;
   top: 0;
   left: 0;
   background: #fff;
   display: table;
+  display: block !important;
 }
-/* .vgs .vgs__close{
+.vgs .vgs__close{
   display: none !important;
 }
 .vgs .vgs__prev{
@@ -167,8 +164,8 @@ export default {
   font-size: 60px;
   top: 33% !important;
   color: #e7e7e7;
-} */
-/* .vgs__container{
+}
+.vgs__container{
   width: 100% !important;
   height: 550px !important;
   background: #fff !important;
@@ -177,13 +174,13 @@ export default {
   max-width: none !important;
   left: 0 !important;
   right: 0 !important;
-} */
-/* .vgs__container img{
+}
+.vgs__container img{
   width: 75.22% !important;
   height: 551px !important;
   margin-left: 12.38% !important;
   object-fit: none !important;
-} */
+}
 </style>
 
 
