@@ -8,10 +8,15 @@
         <p>彩绘系列</p>
       </div>
       <div class="currImg">
-        <img class="image" v-for="(image,i) in images" :key="i" :src="image" @click="index = i" alt="">
+        <div class="bigImgBox">
+          <img class="image" v-for="(image,i) in images" :key="i" :src="image" @click="index = i" alt="">
+        </div>  
         <!-- <img class="image" v-for="(image, i) in images" :key="i" :src="image" @click="index = i"> -->
         <!-- <vue-gallery-slideshow :images="images" :index="index" @close="index = null"></vue-gallery-slideshow> -->
-        <vue-gallery-slideshow :images="images" :index="index" @close="index = null"></vue-gallery-slideshow>
+        <div class="smallImgBox">
+           <vue-gallery-slideshow :images="images" :index="index" @close="index = null"></vue-gallery-slideshow>
+        </div>
+       
       </div>
     </div>
     <!-- 网页底部 -->
@@ -116,21 +121,41 @@ export default {
   position: relative;
   overflow: hidden !important;
 }
-.currImg .vgs{
-  z-index: 9998;
-  top: 0;
-  left: 0;
+.currImg .bigImgBox{
+  width: 76%;
+  height: 550px;
+  margin: 0 auto;
+  border: 1px solid blue;
+  overflow: hidden;
+  position: relative;
+}
+.currImg .bigImgBox img{
   width: 100%;
   height: 550px;
-  height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: rgba(0,0,0,.8);
+}
+.currImg .smallImgBox{
+  width: 100%;
+  height: 200px;
+  border: 1px solid orange;
+  position: relative;
+  z-index: 1000;
+}
+.currImg .vgs{
+  z-index: 998;
+  width: 100%;
+  display: block !important;
+  /* height: 550px; */
+  position: absolute;
+  order: 1px solid green;
+  top: 0;
+  left: 0;
   background: #fff;
   display: table;
 }
-.vgs .vgs__close{
+/* .vgs .vgs__close{
   display: none !important;
 }
 .vgs .vgs__prev{
@@ -142,8 +167,8 @@ export default {
   font-size: 60px;
   top: 33% !important;
   color: #e7e7e7;
-}
-.vgs__container{
+} */
+/* .vgs__container{
   width: 100% !important;
   height: 550px !important;
   background: #fff !important;
@@ -152,13 +177,13 @@ export default {
   max-width: none !important;
   left: 0 !important;
   right: 0 !important;
-}
-.vgs__container img{
+} */
+/* .vgs__container img{
   width: 75.22% !important;
   height: 551px !important;
   margin-left: 12.38% !important;
   object-fit: none !important;
-}
+} */
 </style>
 
 
