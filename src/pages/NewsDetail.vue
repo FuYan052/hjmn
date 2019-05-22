@@ -1,24 +1,23 @@
 <template>
   <div class="newsDetail">
-    <banner></banner>
+    <banner :bannerImg="bannerImg"></banner>
     <header-nav></header-nav>
     <p class="title">
-      上海时装周的背后：设计师品牌怎么直视盈利化
+      {{currNews.title}}
     </p>
     <div class="author">
-      <span>作者：clothing</span>        
-      <span>发布时间：2019-5-17</span>
-      <span>252次浏览</span>
+      <span>作者：{{currNews.writer}}</span>        
+      <span>发布时间：{{currNews.release_time}}</span>
+      <span>{{currNews.views}}次浏览</span>
     </div>
-    <div class="detail">
-      如今，购物中心到了靠内容提升竞争力的时代，除了提供产品和服务，也包括提供什么样的文化内涵给消费者。对购物中心来说，品牌是“内容”。为此，联商网特别策划“重来，购物中心‘新内容运动’”，去挖掘寻找新锐、特色品牌的较新发展和案例，供行业参考。
+    <div class="detail" v-html="currNews.content">
     </div>
     <div class="link">
       <p class="last">
-        上一篇：<span>上海时装周的背后：设计师品牌怎么直视盈利化</span>
+        上一篇：<span @click="lastNews">上海时装周的背后：设计师品牌怎么直视盈利化</span>
       </p>
       <p class="next">
-        上一篇：<span>上海时装周的背后：设计师品牌怎么直视盈利化</span>
+        下一篇：<span @click="nextNews">上海时装周的背后：设计师品牌怎么直视盈利化</span>
       </p>
     </div>
 
@@ -38,7 +37,66 @@ export default {
     Banner,
     HeaderNav,
     Footer
+  },
+  data() {
+    return{
+      bannerImg:[],
+      currNews: '',
+      currId: ''
+    }
+  },
+  created() {
+
+    this.currId = sessionStorage.currNewsId
+
+     //获取banner图
+    this.$http.getNavs().then(resp => {
+      // console.log(resp)
+      if(resp.data.code === 200){
+        const resultList = resp.data.data
+        const result = resultList.filter(item => item.title == '新闻资讯')
+        this.bannerImg.push(result[0].image)
+      }
+    })
+
+    //获取当前新闻
+    this.$http.newsItem(this.currId).then(resp => {
+      if(resp.data.code === 200){
+      this.currNews = resp.data.data
+      }
+    })
+  },
+  methods: {
+    lastNews() {
+      if(this.currId <= 1){
+        this.currId = 1
+      }
+      this.currId = this.currId - 1
+      if(this.currId < 0){
+        this.currId = 1
+      }
+      this.$http.newsItem(this.currId).then(resp => {
+      if(resp.data.code === 200){
+      this.currNews = resp.data.data
+      }
+      console.log(this.currId)
+      })
+    },
+
+    nextNews() {
+      this.currId = this.currId + 1
+      if(this.currId < 0){
+        this.currId = 1
+      }
+      this.$http.newsItem(this.currId).then(resp => {
+      if(resp.data.code === 200){
+      this.currNews = resp.data.data
+      }
+      console.log(this.currId)
+      })
+    }
   }
+  
 }
 </script>
 

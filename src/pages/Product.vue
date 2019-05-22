@@ -1,6 +1,6 @@
 <template>
   <div class="product">
-    <banner></banner>
+    <banner :bannerImg="bannerImg"></banner>
     <header-nav></header-nav>
     <!-- 产品系列 -->
     <div class="productSeries">
@@ -43,6 +43,7 @@ export default {
   },
   data() {
     return{
+      bannerImg:[],
       seriesList: [
         {
           name: '彩绘系列',
@@ -88,6 +89,16 @@ export default {
         },
       ]
     }
+  },
+  created() {
+     //获取banner图
+    this.$http.getNavs().then(resp => {
+      if(resp.data.code === 200){
+        const resultList = resp.data.data
+        const result = resultList.filter(item => item.title == '产品系列')
+        this.bannerImg.push(result[0].image)
+      }
+    })
   }
 }
 </script>

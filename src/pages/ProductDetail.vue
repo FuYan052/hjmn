@@ -1,38 +1,26 @@
 <template>
   <div class="productDetail">
-    <banner></banner>
+    <banner :bannerImg="bannerImg"></banner>
     <header-nav></header-nav>
     <!-- 切换按钮 -->
     <div class="changeBtn">
-      <div class="btnItem">
+      <div class="btnItem" v-for="(item,index) in prodSeries" :key="index">
         <span>/</span>
-        <div class="btnRight">
-          彩绘系列
-        </div>
-      </div>
-      <div class="btnItem">
-        <span>/</span>
-        <div class="btnRight">
-          棕色系列
-        </div>
-      </div>
-      <div class="btnItem">
-        <span>/</span>
-        <div class="btnRight">
-          乳胶系列
+        <div class="btnRight" :class="{'btnActive':btnActiveIndex === index}" @click="changeSeries(item,index)">
+          {{item.name}}
         </div>
       </div>
     </div>
     <!-- 产品列表 -->
     <div class="listBox">
-      <div class="listItem" v-for="(item,index) in picList" :key="index">
+      <div class="listItem" v-for="(item,index) in productList" :key="index">
         <div class="small">
-          <img :src="item.smallImg" alt="">
-          <p>￥<span>13,800</span></p>
+          <img :src="item.image" alt="">
+          <p>￥<span>{{item.price}}</span></p>
         </div>
         <div class="big">
-          <img :src="item.bigImg" alt="">
-          <p>￥<span>13,800</span></p>
+          <img :src="item.image" alt="">
+          <p>￥<span>{{item.price}}</span></p>
         </div>
       </div>
     </div>
@@ -59,48 +47,86 @@ export default {
   },
   data() {
     return{
-      picList: []
+      bannerImg:[],
+      // picList: [],
+      prodSeries: [],
+      btnActiveIndex: 0,
+      productList: [],
     }
   },
   created() {
-    this.picList = [
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-      {
-        smallImg: require('../assets/sm.png'),
-        bigImg: require('../assets/lg.png')
-      },
-    ]
+     //获取banner图
+    this.$http.getNavs().then(resp => {
+      if(resp.data.code === 200){
+        const resultList = resp.data.data
+        const result = resultList.filter(item => item.title == '产品系列')
+        this.bannerImg.push(result[0].image)
+      }
+    })
+    //产品系列
+     this.$http.seriesCate().then(resp => {
+      console.log(resp)
+      if(resp.data.code === 200){
+        this.prodSeries = resp.data.data
+      }
+    })
+    //默认第一个系列列表
+    this.$http.seriesList(1).then(resp => {
+      if(resp.data.code === 200){
+        this.productList = resp.data.data
+      }
+    })
+
+    // this.picList = [
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    //   {
+    //     smallImg: require('../assets/sm.png'),
+    //     bigImg: require('../assets/lg.png')
+    //   },
+    // ]
+  },
+  methods: {
+    changeSeries(item,index) {
+      this.btnActiveIndex = index
+      const id = item.id
+      this.$http.seriesList(id).then(resp => {
+      if(resp.data.code === 200){
+        this.productList = resp.data.data
+        console.log( this.productList)
+      }
+    })
+    }
   }
 }
 </script>
@@ -134,7 +160,7 @@ export default {
         text-align: center;
         cursor: pointer;
       }
-      .btnRight:hover{
+      .btnActive{
         padding: 0 30px;
         border-top: 2px solid #c19b76;
         border-bottom: 2px solid #c19b76;
@@ -151,10 +177,9 @@ export default {
     margin: 0 auto;
     .listItem{
       width: 100%;
-      .small{
+      div:nth-of-type(1){
         width: 31%;
         height: 100%;
-        background: pink;
         position: relative;
         img{
           width: 100%;
@@ -172,10 +197,9 @@ export default {
           }
         }
       }
-      .big{
+      div:nth-of-type(2){
         width: 67.97%;
         height: 100%;
-        background: #dedede;
         position: relative;
         img{
           width: 100%;

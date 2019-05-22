@@ -1,17 +1,23 @@
 <template>
   <div class="banner">
-    <div class="bannerBox">
-      <img src="../assets/banner.png" alt="">
-    </div>
-    <div class="textWrap">
-        <img src="../assets/bannerText.png" alt="">
+    <div class="bannerBox" v-for="(item,index) in bannerImg" :key="index">
+      <img :src="item" alt="">
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Banner'
+  name: 'Banner',
+  data() {
+    return{
+      props:['bannerImg'],
+    }
+  }, props:['bannerImg'],
+  created() {
+    // console.log(this.props)
+  }
+  
 }
 </script>
 
@@ -32,17 +38,5 @@ export default {
       height: 845px;
     }
   }
-  .textWrap{
-      width: 201px;
-      height: 56px;
-      margin: 0 auto;
-      margin-top: 360px;
-      position: relative;
-      z-index: 10;
-      img{
-        width: 201px;
-        height: 56px;
-      }
-    }
 }
 </style>

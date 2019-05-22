@@ -1,7 +1,7 @@
 <template>
   <!-- 产品大图 -->
   <div class="productImg">
-    <banner></banner>
+    <banner :bannerImg="bannerImg"></banner>
     <header-nav></header-nav>
     <div class="imgContent">
       <div class="currTitle">
@@ -40,6 +40,7 @@ export default {
   },
   data() {
     return {
+      bannerImg:[],
       images: [
         require("../assets/big1.png"),
         require("../assets/big2.png"),

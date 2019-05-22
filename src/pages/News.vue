@@ -1,37 +1,41 @@
 <template>
   <div class="news">
-    <banner></banner>
+    <banner :bannerImg="bannerImg"></banner>
     <header-nav></header-nav>
     <!-- 切换按钮 -->
     <div class="changeBtn">
-      <div class="btnLeft">
-        新闻动态
-      </div>
       <span>/</span>
-      <div class="btnRight">
-        行业资讯
+      <div  v-for="(item,index) in newsCate" :key="index" :class="{'activeNewsCate':activeNewsCateIndex === index}" @click="changeNewsCate(item,index)">
+        {{item.name}}
       </div>
     </div>
     <!-- 新闻列表 -->
     <div class="newsList">
       <div class="listItem" v-for="(item,index) in newsList" :key="index">
         <div class="leftImg">
-          <img src="../assets/itemLeft.png" alt="">
+          <img :src="item.image" alt="">
         </div>
         <div class="rightContent">
-          <div class="title">
+          <div class="title" @click="toDetail(item,index)">
             {{item.title}}
           </div>
           <div class="date">
-            {{item.date}}
+            {{item.release_time}}
           </div>
           <div class="detail">
-           {{item.detail}}
+           {{item.remark}}
           </div>
         </div>
       </div>
     </div>
-
+    <!-- 分页器 -->
+    <div class="page">
+      <el-pagination
+        layout="prev, pager, next"
+        @current-change="handleCurrentChange"
+        :total="total">
+      </el-pagination>
+    </div>
     <!-- 网页底部 -->
     <Footer></Footer>
     
@@ -41,6 +45,7 @@
 <script>
 import Banner from '../components/Banner'
 import HeaderNav from '../components/HeaderNav'
+import { Pagination  } from 'element-ui'
 import Footer from '../components/Footer'
 export default {
   name: 'News',
@@ -51,38 +56,77 @@ export default {
   },
   data() {
     return{
-      newsList: [
-        {
-          url: require("../assets/itemLeft.png"),
-          title: '上海时装周的背后：设计师品牌怎么直视盈利化',
-          date: '2019-5-17',
-          detail: '数字化与信息化的迅速发展，给各行各业带来了新的生存环境与新的发展契机。服装产业智能专家、北京服装学院副教授、北京...'
-        },
-        {
-          url: require("../assets/itemLeft.png"),
-          title: '上海时装周的背后：设计师品牌怎么直视盈利化',
-          date: '2019-5-17',
-          detail: '数字化与信息化的迅速发展，给各行各业带来了新的生存环境与新的发展契机。服装产业智能专家、北京服装学院副教授、北京...'
-        },
-        {
-          url: require("../assets/itemLeft.png"),
-          title: '上海时装周的背后：设计师品牌怎么直视盈利化',
-          date: '2019-5-17',
-          detail: '数字化与信息化的迅速发展，给各行各业带来了新的生存环境与新的发展契机。服装产业智能专家、北京服装学院副教授、北京...'
-        },
-        {
-          url: require("../assets/itemLeft.png"),
-          title: '上海时装周的背后：设计师品牌怎么直视盈利化',
-          date: '2019-5-17',
-          detail: '数字化与信息化的迅速发展，给各行各业带来了新的生存环境与新的发展契机。服装产业智能专家、北京服装学院副教授、北京...'
-        },
-        {
-          url: require("../assets/itemLeft.png"),
-          title: '上海时装周的背后：设计师品牌怎么直视盈利化',
-          date: '2019-5-17',
-          detail: '数字化与信息化的迅速发展，给各行各业带来了新的生存环境与新的发展契机。服装产业智能专家、北京服装学院副教授、北京...'
-        },
-      ]
+      bannerImg:[],
+      newsCate: [],
+      newsCateId: '1',
+      activeNewsCateIndex: 0,
+      newsList: [],
+      total: null,
+    }
+  },
+  created() {
+    //获取banner图
+    this.$http.getNavs().then(resp => {
+      // console.log(resp)
+      if(resp.data.code === 200){
+        const resultList = resp.data.data
+        const result = resultList.filter(item => item.title == '新闻资讯')
+        this.bannerImg.push(result[0].image)
+      }
+    })
+    //获取新闻分类
+    this.$http.newsCate().then(resp => {
+      //  console.log(resp)
+      if(resp.data.code === 200){
+        this.newsCate = resp.data.data
+        this.newsCateId = 1
+      }
+    })
+    //获取新闻列表
+    this.$http.newsList(1,1).then(resp => {
+       console.log(resp)
+      if(resp.data.code === 200){
+        this.total = resp.data.data.count
+        this.newsList = resp.data.data.data
+      }
+    })
+  },
+  methods: {
+    changeNewsCate(item,index) {
+        this.activeNewsCateIndex = index
+        const id = item.id
+        this.newsCateId = id
+        this.$http.newsList(id,1).then(resp => {
+        console.log(resp)
+        if(resp.data.code === 200){
+          this.total = resp.data.data.count
+          this.newsList = resp.data.data.data
+        }
+      })
+    },
+    handleCurrentChange(curr) {
+      console.log(curr)
+      const currId = this.newsCateId
+      //获取新闻列表
+      this.$http.newsList(currId,curr).then(resp => {
+        console.log(resp)
+        if(resp.data.code === 200){
+          this.total = resp.data.data.count
+          this.newsList = resp.data.data.data
+        }
+      })
+    },
+    //跳转新闻详情
+    toDetail(item) {
+      this.$router.push({
+        path: '/newsDetail',
+        name: 'NewsDetail',
+        params: {
+          id: item.id,
+          item
+        }
+      })
+      sessionStorage.setItem('currNewsId',JSON.stringify(item.id))
     }
   }
 }
@@ -95,8 +139,8 @@ export default {
     height: 56px;
     margin: 90px auto;
     margin-bottom: 50px;
-    display: flex;
-    justify-content: space-between;
+    // display: flex;
+    // justify-content: space-between;
     div{
       width: 162px;
       height: 56px;
@@ -106,23 +150,29 @@ export default {
       text-align: center;
       cursor: pointer;
     }
-    div:hover{
+    // div:hover{
+    //   border-top: 2px solid #c19b76;
+    //   border-bottom: 2px solid #c19b76;
+    //   color: #c19b76;
+    // }
+    .activeNewsCate{
       border-top: 2px solid #c19b76;
       border-bottom: 2px solid #c19b76;
       color: #c19b76;
     }
-    .btnLeft{
+    div:nth-of-type(1){
       float: left;
     }
-    .btnRight{
+    div:nth-of-type(2){
       float: right;
     }
     span{
-      display: block;
       height: 56px;
       line-height: 56px;
       font-size:24px;
       color:rgba(153,153,153,1);
+      display: inline-block;
+      margin-left: 17%;
     }
   }
   .newsList{
@@ -155,6 +205,9 @@ export default {
           font-size:24px;
           color:rgba(52,52,52,1);
           line-height: 55px;
+          overflow:hidden;
+          text-overflow:ellipsis;
+          white-space:nowrap;
           cursor: pointer;
         }
         .title:hover{
@@ -175,6 +228,12 @@ export default {
         }
       }
     }
+  }
+  .page{
+    width: 260px;
+    height: 30px;
+    border: 1px solid red;
+    margin: 85px auto;
   }
 }
 </style>

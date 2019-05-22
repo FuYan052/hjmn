@@ -1,7 +1,7 @@
 <template>
   <!-- 联系我们 -->
   <div class="contact">
-    <banner></banner>
+    <banner :bannerImg="bannerImg"></banner>
     <header-nav></header-nav>
     <!-- 联系我们 -->
     <div class="contactUs"> 
@@ -74,6 +74,7 @@ export default {
   },
   data() {
     return{
+      bannerImg: [],
       center: {lng: 0, lat: 0},
       zoom: 3,
       form: {
@@ -84,16 +85,36 @@ export default {
       }
     }
   },
+  created() {
+    //获取banner图
+    this.$http.getNavs().then(resp => {
+      // console.log(resp)
+      if(resp.data.code === 200){
+        const resultList = resp.data.data
+        const result = resultList.filter(item => item.title == '联系我们')
+        this.bannerImg.push(result[0].image)
+      }
+    })
+  },
    methods: {
     handler ({BMap, map}) {
-      console.log(BMap, map)
       this.center.lng = 103.67937
       this.center.lat = 30.767555
       this.zoom = 15
     },
     //表单提交
     onSubmit() {
+        event.preventDefault()
         console.log(this.form);
+        const params = this.form
+        this.$http.info(params.name,params.phone,params.email,params.message).then(resp => {
+          console.log(resp)
+          if(resp.data.code === 200){
+            alert("提交成功！")
+          } else {
+            alert("姓名和电话号码不能为空！")
+          }
+        })
     }
   }
 }
@@ -180,7 +201,7 @@ export default {
           border: none;
           outline: none;
           margin-top: 30px;
-          color: #c19b76;
+          color: #999;
         }
       }
       .message{
@@ -201,7 +222,7 @@ export default {
           margin-top: 15px;
           border: none;
           outline: none;
-          color: #c19b76;
+          color: #999;
         }
       }
       .subBtn{
