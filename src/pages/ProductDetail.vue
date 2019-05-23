@@ -14,14 +14,17 @@
     <!-- 产品列表 -->
     <div class="listBox">
       <div class="listItem" v-for="(item,index) in productList" :key="index">
-        <div class="small">
-          <img :src="item.image" alt="">
-          <p>￥<span>{{item.price}}</span></p>
+        <!-- <div class="xh" > -->
+          <div class="smallss" v-for="(it,ind) in item" :key="ind" @click="proItem(it)">
+            <img :src="it.image" alt="">
+            <p>￥<span>{{it.price}}</span></p>
+          <!-- </div> -->
+          <!-- <div class="big">
+            <img :src="item.image" alt="">
+            <p>￥<span>{{item.price}}</span></p>
+          </div> -->
         </div>
-        <div class="big">
-          <img :src="item.image" alt="">
-          <p>￥<span>{{item.price}}</span></p>
-        </div>
+        
       </div>
     </div>
     <!-- 底部大图 -->
@@ -48,7 +51,7 @@ export default {
   data() {
     return{
       bannerImg:[],
-      // picList: [],
+      picList: [],
       prodSeries: [],
       btnActiveIndex: 0,
       productList: [],
@@ -72,49 +75,45 @@ export default {
     })
     //默认第一个系列列表
     this.$http.seriesList(1).then(resp => {
+      console.log(resp)
       if(resp.data.code === 200){
         this.productList = resp.data.data
       }
     })
-
-    // this.picList = [
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    //   {
-    //     smallImg: require('../assets/sm.png'),
-    //     bigImg: require('../assets/lg.png')
-    //   },
-    // ]
+    this.picList = [
+      [{
+        smallImg: require('../assets/sm.png'),
+        bigImg: require('../assets/lg.png')
+      },
+      {
+        smallImg: require('../assets/small1.png'),
+        bigImg: require('../assets/lg.png')
+      }],
+      [{
+        smallImg: require('../assets/small2.png'),
+        bigImg: require('../assets/lg.png')
+      },
+      {
+        smallImg: require('../assets/small3.png'),
+        bigImg: require('../assets/lg.png')
+      }],
+      [{
+        smallImg: require('../assets/sm.png'),
+        bigImg: require('../assets/lg.png')
+      },
+      {
+        smallImg: require('../assets/sm.png'),
+        bigImg: require('../assets/lg.png')
+      }],
+      [{
+        smallImg: require('../assets/sm.png'),
+        bigImg: require('../assets/lg.png')
+      },
+      {
+        smallImg: require('../assets/sm.png'),
+        bigImg: require('../assets/lg.png')
+      }],
+    ]
   },
   methods: {
     changeSeries(item,index) {
@@ -126,6 +125,16 @@ export default {
         console.log( this.productList)
       }
     })
+    },
+    // 跳转详情
+    proItem(it) {
+      this.$router.push({
+        path: '/productImg',
+        name: 'ProductImg',
+        params: {
+          id: it.id
+        }
+      })
     }
   }
 }
@@ -177,7 +186,7 @@ export default {
     margin: 0 auto;
     .listItem{
       width: 100%;
-      div:nth-of-type(1){
+      .smallss:nth-of-type(1){
         width: 31%;
         height: 100%;
         position: relative;
@@ -197,7 +206,7 @@ export default {
           }
         }
       }
-      div:nth-of-type(2){
+      .smallss:nth-of-type(2){
         width: 67.97%;
         height: 100%;
         position: relative;
@@ -222,20 +231,20 @@ export default {
     .listItem:nth-child(odd){
       height: 580px;
       margin-bottom: 20px;
-      .small{
+      .smallss:nth-child(1){
         float: right;
       }
-      .big{
+      .smallss:nth-child(2){
         float: left;
       }
     }
     .listItem:nth-child(even){
       height: 460px;
       margin-bottom: 15px;
-      .small{
+      .smallss:nth-child(1){
         float: left;
       }
-      .big{
+      .smallss:nth-child(2){
         float: right;
       }
     }
@@ -251,4 +260,3 @@ export default {
     }
 }
 </style>
-

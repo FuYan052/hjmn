@@ -30,7 +30,7 @@
           <div class="price">
             ￥{{item.price}}
           </div>
-          <div class="toDetailBtn">
+          <div class="toDetailBtn" @click="productDetail(item)">
             了解详情
           </div>
         </div>
@@ -169,6 +169,15 @@ export default {
     toseries() {
       this.$router.push({
         path: '/productDetail'
+      })
+    },
+    productDetail(item) {
+      this.$router.push({
+        path: '/productImg',
+        name: 'ProductImg',
+        params: {
+          id: item.id
+        }
       })
     }
   }

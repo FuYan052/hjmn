@@ -5,22 +5,22 @@
     <!-- 产品系列 -->
     <div class="productSeries">
       <div class="seriesItem" 
-          v-for="(item,index) in seriesList"
+          v-for="(item,index) in seriesCate"
           :key="index">
         <div class="itemText">
           <div class="seriesName">{{item.name}}</div>
           <div class="proDesc">
-            {{item.describe}}
+            {{item.introduce}}
           </div>
-          <div class="price">
+          <!-- <div class="price">
             ￥{{item.price}}
-          </div>
-          <div class="toDetailBtn">
+          </div> -->
+          <div class="toDetailBtn" @click="toProdItem(item)">
             了解详情
           </div>
         </div>
         <div class="itemImg">
-          <img :src="item.url" alt="">
+          <img :src="item.image" alt="">
         </div>
       </div>
     </div>
@@ -44,6 +44,7 @@ export default {
   data() {
     return{
       bannerImg:[],
+      seriesCate: '',
       seriesList: [
         {
           name: '彩绘系列',
@@ -99,6 +100,28 @@ export default {
         this.bannerImg.push(result[0].image)
       }
     })
+     //获取系列分类
+    this.$http.seriesCate().then(resp => {
+      console.log(resp)
+      if(resp.data.code === 200){
+        this.seriesCate = resp.data.data
+        // const resultList = resp.data.data
+        // const result = resultList.filter(item => item.title == '产品系列')
+        // this.bannerImg.push(result[0].image)
+      }
+    })
+  },
+  methods: {
+    toProdItem(item){
+      console.log(item)
+      this.$router.push({
+        path: '/productDetail',
+        // name: 'ProductImg',
+        // params: {
+        //   id: item.id
+        // }
+      })
+    }
   }
 }
 </script>

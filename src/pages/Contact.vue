@@ -10,8 +10,8 @@
     </div>
     <!-- 联系方式 -->
     <div class="contactType">
-      <p>18228957188（陈先生)</p>
-      <p>崇州市观胜镇双桥村八组</p>
+      <p>{{address}}</p>
+      <p>{{mobile}}</p>
     </div>
     <!-- 左侧地图 -->
     <div class="mapWrap">
@@ -76,6 +76,8 @@ export default {
     return{
       bannerImg: [],
       center: {lng: 0, lat: 0},
+      mobile: '',
+      address: '',
       zoom: 3,
       form: {
         name: '',
@@ -95,6 +97,14 @@ export default {
         this.bannerImg.push(result[0].image)
       }
     })
+    // 获取联系方式
+    this.$http.OnlineFranchise(3).then(resp => {
+      console.log(resp)
+      if(resp.data.code === 200){
+        this.mobile = resp.data.data.phone
+        this.address = resp.data.data.address
+      }
+    })
   },
    methods: {
     handler ({BMap, map}) {
@@ -110,7 +120,7 @@ export default {
         this.$http.info(params.name,params.phone,params.email,params.message).then(resp => {
           console.log(resp)
           if(resp.data.code === 200){
-            alert("提交成功！")
+            alert("提交成功!")
           } else {
             alert("姓名和电话号码不能为空！")
           }

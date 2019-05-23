@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 const ajax = axios.create()
-
+const ajax1 = axios.create({
+  baseURL: 'http://192.168.1.127'
+})
 //获取导航栏
 export const getNavs = () => {
   return ajax.get('http://192.168.1.127/muniu/index.php/home/index/colmun')
@@ -31,9 +33,9 @@ export const seriesList = (id) => {
   return ajax.get(`http://192.168.1.127/muniu/index.php/home/index/cases?id=${id}`)
 }
 //产品详情
-// export const productDetail = (id) => {
-//   return ajax.get(`http://192.168.1.127/muniu/index.php/home/index/getCasesOne?id=${id}`)
-// }
+export const productDetail = (id) => {
+  return ajax.get(`http://192.168.1.127/muniu/index.php/home/index/getCasesOne?id=${id}`)
+}
 //新闻分类
 export const newsCate = () => {
   return ajax.get('http://192.168.1.127/muniu/index.php/home/index/getNewsCate')
@@ -46,7 +48,11 @@ export const newsList = (id,page) => {
 export const newsItem = (id) => {
   return ajax.get(`http://192.168.1.127/muniu/index.php/home/index/getNewsOne?id=${id}`)
 }
-//联系我们提交信息
+//新闻上下页
+export const newsLastNext = (id) => {
+  return ajax.get(`http://192.168.1.127/muniu/index.php/home/index/getPage?id=${id}`)
+}
+//联系我们页面提交信息
 export const info = (name,mobile,email,content) => {
   return ajax.get(`http://192.168.1.127/muniu/index.php/home/index/getMessage?name=${name}&mobile=${mobile}&email=${email}&content=${content}`)
 }

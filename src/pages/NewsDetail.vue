@@ -42,7 +42,9 @@ export default {
     return{
       bannerImg:[],
       currNews: '',
-      currId: ''
+      currId: '',
+      lastNewsItem: {},
+      nextNewsItem: {},
     }
   },
   created() {
@@ -67,32 +69,29 @@ export default {
     })
   },
   methods: {
+    //新闻上下页
     lastNews() {
-      if(this.currId <= 1){
-        this.currId = 1
-      }
-      this.currId = this.currId - 1
-      if(this.currId < 0){
-        this.currId = 1
-      }
-      this.$http.newsItem(this.currId).then(resp => {
-      if(resp.data.code === 200){
-      this.currNews = resp.data.data
-      }
-      console.log(this.currId)
+      this.$http.newsLastNext(this.currId).then(resp => {
+        console.log(resp)
+        if(resp.data.code === 200){
+          this.lastNewsItem = resp.data.data.LasePage
+          this.currId = this.lastNewsItem.id
+          sessionStorage.setItem('currNewsId',JSON.stringify(this.currId))
+          this.currNews = this.lastNewsItem
+        }
       })
     },
-
     nextNews() {
-      this.currId = this.currId + 1
-      if(this.currId < 0){
-        this.currId = 1
-      }
-      this.$http.newsItem(this.currId).then(resp => {
-      if(resp.data.code === 200){
-      this.currNews = resp.data.data
-      }
-      console.log(this.currId)
+      this.$http.newsLastNext(this.currId).then(resp => {
+        if(resp.data.code === 200){
+          this.nextNewsItem = resp.data.data.NextPage
+          // console.log(this.nextNewsItem)
+          this.currId = this.nextNewsItem.id
+          // console.log(this.currId)
+          sessionStorage.setItem('currNewsId',JSON.stringify(this.currId ))
+          this.currNews = this.nextNewsItem
+        }
+        // console.log(this.nextNewsItem)
       })
     }
   }

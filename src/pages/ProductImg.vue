@@ -5,7 +5,7 @@
     <header-nav></header-nav>
     <div class="imgContent">
       <div class="currTitle">
-        <p>彩绘系列</p>
+        <p>{{title}}</p>
       </div>
       <div class="currImg">
         <div class="bigImgBox">
@@ -14,7 +14,7 @@
         <!-- <img class="image" v-for="(image, i) in images" :key="i" :src="image" @click="index = i"> -->
         <!-- <vue-gallery-slideshow :images="images" :index="index" @close="index = null"></vue-gallery-slideshow> -->
         <div class="smallImgBox">
-           <vue-gallery-slideshow :images="images" :index="index" @close="index = null"></vue-gallery-slideshow>
+           <vue-gallery-slideshow v-show="true" :images="images" :index="index" @close="index = null"></vue-gallery-slideshow>
         </div>
        
       </div>
@@ -41,11 +41,12 @@ export default {
   data() {
     return {
       bannerImg:[],
+      title: '',
       images: [
-        require("../assets/big1.png"),
-        require("../assets/big2.png"),
-        require("../assets/big3.png"),
-        require("../assets/big4.png"),
+        // require("../assets/big1.png"),
+        // require("../assets/big2.png"),
+        // require("../assets/big3.png"),
+        // require("../assets/big4.png"),
       ],
     //   images: [
     //   '../assets/big1.png',
@@ -63,6 +64,14 @@ export default {
     }
   },
   created() {
+     //获取banner图
+    this.$http.getNavs().then(resp => {
+      if(resp.data.code === 200){
+        const resultList = resp.data.data
+        const result = resultList.filter(item => item.title == '产品系列')
+        this.bannerImg.push(result[0].image)
+      }
+    })
     // this.images = [
     //   {
     //     url: "../assets/big1.png"
@@ -74,6 +83,13 @@ export default {
     //     url: "../assets/small1.png"
     //   },
     // ]
+    console.log(this.$route.params.id)
+    const proId = this.$route.params.id
+    this.$http.productDetail(proId).then(resp => {
+      console.log(resp)
+      this.title = resp.data.data.title
+      this.images = resp.data.data.image1
+    })
   }
 }
 </script>
@@ -102,7 +118,6 @@ export default {
     .currImg{
       width: 100%;
       height: 800px;
-      border: 1px solid red;
       margin: 0 auto;
       margin-top: 80px;
       position: relative;
@@ -116,7 +131,6 @@ export default {
 .currImg{
   width: 100%;
   height: 800px;
-  border: 1px solid red;
   margin: 0 auto;
   margin-top: 80px;
   position: relative;
@@ -126,7 +140,6 @@ export default {
   width: 76%;
   height: 550px;
   margin: 0 auto;
-  border: 1px solid blue;
   overflow: hidden;
   position: relative;
 }
@@ -146,7 +159,6 @@ export default {
   width: 100%;
   height: 550px;
   position: absolute;
-  order: 1px solid green;
   top: 0;
   left: 0;
   background: #fff;
@@ -166,6 +178,14 @@ export default {
   top: 33% !important;
   color: #e7e7e7;
 }
+.vgs__gallery{
+  bottom: 10px;
+  margin: 0 !important;
+  max-width: 100% !important; 
+  left: 0 !important;
+  right: 0 !important;
+  padding-left: 12% !important;
+}
 .vgs__container{
   width: 100% !important;
   height: 550px !important;
@@ -176,11 +196,14 @@ export default {
   left: 0 !important;
   right: 0 !important;
 }
+.vgs__gallery__title{
+  display: none;
+}
 .vgs__container img{
   width: 75.22% !important;
   height: 551px !important;
   margin-left: 12.38% !important;
-  object-fit: none !important;
+  /* object-fit: none !important; */
 }
 </style>
 
